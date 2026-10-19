@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Reseller Pro 3w1</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: #0b0f19; color: #f1f5f9; padding-bottom: 50px; }
+    
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-icon { width: 34px; height: 34px; background: #0ea5e9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .brand-title { font-size: 17px; font-weight: 700; color: #fff; }
+    .brand-subtitle { font-size: 11px; color: #94a3b8; }
+    .badge-tos { background: #065f46; color: #34d399; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 9999px; }
+
+    .container { padding: 14px; max-width: 600px; margin: 0 auto; }
+
+    /* Sekcja zdjęć */
+    .upload-card {
+      background: #1e293b;
+      border: 2px dashed #0284c7;
+      border-radius: 16px;
+      padding: 20px 14px;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .upload-icon { font-size: 36px; margin-bottom: 6px; }
+    .upload-title { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .upload-hint { font-size: 11px; color: #94a3b8; margin-bottom: 14px; }
+    
+    .btn-row { display: flex; gap: 8px; justify-content: center; }
+    .btn-action {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .btn-camera { background: #059669; }
+    
+    /* Podgląd zdjęć */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #475569;
+    }
+    .preview-item img { width: 100%; height: 100%; object-fit: cover; }
+    .preview-remove {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(239, 68, 68, 0.9);
+      color: #fff;
+      border: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* Pola formularza */
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 12px; font-weight: 700; color: #cbd5e1; margin-bottom: 4px; }
+    .form-input, .form-select {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus { border-color: #38bdf8; }
+
+    /* Główny przycisk */
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    .btn-submit:active { transform: scale(0.98); }
+
+    /* Spinner */
+    .loading-overlay {
+      display: none;
+      background: rgba(11, 15, 25, 0.92);
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 1000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #334155;
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 14px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Sekcje Wyników */
+    .results-container { margin-top: 20px; display: none; }
+    
+    .section-card {
+      background: #1e293b;
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid #334155;
+      margin-bottom: 14px;
+    }
+    .section-header {
+      font-size: 14px;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 6px;
+    }
+
+    /* Siatka cenowa */
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .price-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+    .price-label { font-size: 10px; color: #94a3b8; font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
+    .price-val { font-size: 16px; font-weight: 800; color: #fff; }
+    .price-highlight { border-color: #0284c7; background: #0c4a6e; }
+    .price-highlight .price-val { color: #38bdf8; }
+
+    /* Okienka tekstu z przyciskiem kopiuj */
+    .code-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .code-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94a3b8; }
+    .btn-copy {
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-copy:active { background: #38bdf8; color: #0f172a; }
+    .code-content {
+      font-size: 13px;
+      color: #f1f5f9;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+      user-select: all;
+    }
+
+    /* Przyciski portali */
+    .portal-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .btn-portal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 6px;
+      border-radius: 10px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      gap: 4px;
+    }
+    .portal-vinted { background: #0f766e; }
+    .portal-olx { background: #c2410c; }
+    .portal-allegro { background: #ea580c; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #10b981;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+      transition: transform 0.25s ease-out;
+      z-index: 2000;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <div class="brand-title">Reseller Pro 3w1</div>
+        <div class="brand-subtitle">Vinted • OLX • Allegro Lokalnie</div>
+      </div>
+    </div>
+    <div class="badge-tos">🛡️ TOS GUARD 2026</div>
+  </header>
+
+  <div class="container">
+
+    <!-- Upload Card -->
+    <div class="upload-card">
+      <div class="upload-icon">📸</div>
+      <div class="upload-title">Wgraj zdjęcia przedmiotu</div>
+      <div class="upload-hint">Do 20 zdjęć (przedmiot, tabliczka znamionowa, metki, opakowanie)</div>
+      
+      <div class="btn-row">
+        <label class="btn-action btn-camera">
+          📷 Aparat
+          <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none">
+        </label>
+        <label class="btn-action">
+          🖼️ Galeria
+          <input type="file" id="galleryInput" accept="image/*" multiple style="display:none">
+        </label>
+      </div>
+
+      <div class="preview-grid" id="previewGrid"></div>
+    </div>
+
+    <!-- Opcjonalne szczegóły -->
+    <div class="form-group">
+      <label class="form-label">Stan przedmiotu:</label>
+      <select class="form-select" id="itemCondition">
+        <option value="nowy_pudelko">Nowy / Otwarty karton (Klasa A)</option>
+        <option value="sprawdzony">Sprawdzony ze zwrotu, stan bardzo dobry (Klasa A/B)</option>
+        <option value="drobne_slady">Drobne ślady / mikro-ryski (Klasa B)</option>
+        <option value="brak_akcesorium">Sprawny, brak kabla/instrukcji (Klasa B-)</option>
+        <option value="nietestowany">Nietestowany / Uszkodzony (Klasa C - Licytacja)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Dodatkowe uwagi (opcjonalnie):</label>
+      <input type="text" class="form-input" id="extraNotes" placeholder="np. brak kabla USB, sprawdzony działa, rozmiar L">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">🔑 Klucz Gemini API (zapamięta na telefonie):</label>
+      <input type="password" class="form-input" id="geminiApiKey" placeholder="Wklej swój klucz Gemini API">
+    </div>
+
+    <!-- Przycisk Generuj -->
+    <button class="btn-submit" id="generateBtn" onclick="analyzeAndGenerate()">
+      ⚡ GENERUJ OPRACOWANIE (SCHEMAT OS)
+    </button>
+
+    <!-- Sekcja Wyników wg Schematu Użytkownika -->
+    <div class="results-container" id="resultsSection">
+
+      <!-- 1. Weryfikacja kompletności i stanu -->
+      <div class="section-card">
+        <div class="section-header">🔍 1. Weryfikacja kompletności i stanu</div>
+        
+        <div style="font-size: 13px; line-height: 1.5;">
+          <div style="margin-bottom: 8px;">
+            <strong style="color: #38bdf8;">Identyfikacja modelu:</strong>
+            <div id="resModel" style="color: #f1f5f9; margin-top: 2px;"></div>
+          </div>
+          
+          <div style="margin-bottom: 8px;">
+            <strong style="color: #38bdf8;">Elementy i stan:</strong>
+            <div id="resStan" style="color: #f1f5f9; margin-top: 2px; white-space: pre-wrap;"></div>
+          </div>
+
+          <div style="background: rgba(245, 158, 11, 0.15); border-left: 3px solid #f59e0b; padding: 8px 10px; border-radius: 4px; font-size: 12px; color: #fbbf24;">
+            ⚠️ <span id="resUwagaVinted"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Wycena przedmiotu -->
+      <div class="section-card">
+        <div class="section-header">💰 2. Wycena przedmiotu (z buforem na targowanie)</div>
+        
+        <div class="price-grid">
+          <div class="price-box">
+            <div class="price-label">Nowy w sklepach</div>
+            <div class="price-val" id="resCenaNowy" style="font-size:14px;"></div>
+          </div>
+          <div class="price-box price-highlight">
+            <div class="price-label" style="color:#7dd3fc;">Wpisz w ogłoszeniu (+15-20%)</div>
+            <div class="price-val" id="resCenaBufor"></div>
+          </div>
+          <div class="price-box">
+            <div class="price-label">Cel od ręki (realny)</div>
+            <div class="price-val" id="resCenaCel" style="color:#34d399;"></div>
+          </div>
+          <div class="price-box">
+            <div class="price-label">Sztywne minimum</div>
+            <div class="price-val" id="resCenaMin" style="color:#f87171;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Tytuł (w osobnym okienku) -->
+      <div class="section-card">
+        <div class="section-header">🏷️ 3. Tytuł (max 70 znaków, bez ALL-CAPS)</div>
+        
+        <div class="code-box">
+          <div class="code-header">
+            <span class="code-label">Tytuł do skopiowania 1 kliknięciem:</span>
+            <button class="btn-copy" onclick="copyText('resTitle')">📋 Kopiuj Tytuł</button>
+          </div>
+          <div class="code-content" id="resTitle"></div>
+        </div>
+      </div>
+
+      <!-- 4. Treść ogłoszenia + 20 hashtagów -->
+      <div class="section-card">
+        <div class="section-header">📝 4. Treść ogłoszenia + 20 hashtagów (czysty tekst bez **)</div>
+        
+        <div class="code-box">
+          <div class="code-header">
+            <span class="code-label">Gotowy opis do bezpośredniego wklejenia:</span>
+            <button class="btn-copy" onclick="copyText('resDesc')">📋 Kopiuj Cały Opis</button>
+          </div>
+          <div class="code-content" id="resDesc"></div>
+        </div>
+      </div>
+
+      <!-- Bezpośrednie linki do portali -->
+      <div class="section-card" style="text-align: center;">
+        <div class="code-label" style="margin-bottom: 8px;">🚀 Otwórz portal jednym dotknięciem i wklej:</div>
+        <div class="portal-row">
+          <a href="https://www.vinted.pl/items/new" target="_blank" class="btn-portal portal-vinted">
+            <span>🟢 Vinted</span>
+          </a>
+          <a href="https://www.olx.pl/d/nowe-ogloszenie/" target="_blank" class="btn-portal portal-olx">
+            <span>🟠 OLX</span>
+          </a>
+          <a href="https://allegrolokalnie.pl/wystaw-przedmiot" target="_blank" class="btn-portal portal-allegro">
+            <span>🟣 Allegro Lok.</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div style="font-size: 16px; font-weight: 700; margin-bottom: 6px;">Gemini 3.5 AI analizuje zdjęcia...</div>
+    <div style="font-size: 13px; color: #94a3b8;">Odczytuję model, wyceniam i tworzę opracowanie OS</div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">📋 Skopiowano do schowka!</div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(e => console.log('SW error:', e));
+    }
+
+    let selectedFiles = [];
+
+    // Zapamiętywanie klucza w telefonie
+    const keyInput = document.getElementById('geminiApiKey');
+    const savedKey = localStorage.getItem('gemini_api_key');
+    if (savedKey) {
+      keyInput.value = savedKey;
+    }
+
+    document.getElementById('cameraInput').addEventListener('change', handleFileSelect);
+    document.getElementById('galleryInput').addEventListener('change', handleFileSelect);
+
+    function handleFileSelect(e) {
+      const files = Array.from(e.target.files);
+      selectedFiles = selectedFiles.concat(files).slice(0, 20);
+      renderPreviews();
+    }
+
+    function renderPreviews() {
+      const grid = document.getElementById('previewGrid');
+      grid.innerHTML = '';
+      selectedFiles.forEach((file, index) => {
+        const item = document.createElement('div');
+        item.className = 'preview-item';
+        
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        
+        const rm = document.createElement('button');
+        rm.className = 'preview-remove';
+        rm.innerHTML = '×';
+        rm.onclick = () => {
+          selectedFiles.splice(index, 1);
+          renderPreviews();
+        };
+
+        item.appendChild(img);
+        item.appendChild(rm);
+        grid.appendChild(item);
+      });
+    }
+
+    function copyText(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      if (!text) return;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(showToast);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast();
+      }
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // Funkcja zmniejszająca zdjęcia w telefonie do max 1600px (oszczędność transferu)
+    function compressImageToBase64(file, maxDimension = 1600, quality = 0.85) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxDimension || height > maxDimension) {
+              if (width > height) {
+                height = Math.round((height * maxDimension) / width);
+                width = maxDimension;
+              } else {
+                width = Math.round((width * maxDimension) / height);
+                height = maxDimension;
+              }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const dataUrl = canvas.toDataURL('image/jpeg', quality);
+            const base64Data = dataUrl.split(',')[1];
+            resolve(base64Data);
+          };
+          img.onerror = reject;
+          img.src = event.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Zapewnienie braku słów pisanych samymi wielkimi literami
+    function enforceNoAllCaps(title) {
+      return title.split(' ').map(w => {
+        if (w.length > 1 && w === w.toUpperCase() && /[A-Z]/.test(w)) {
+          return w.charAt(0) + w.slice(1).toLowerCase();
+        }
+        return w;
+      }).join(' ');
+    }
+
+    // Czysty tekst bez **
+    function cleanMarkdown(text) {
+      return text.replace(/\*\*/g, '').replace(/###/g, '').replace(/##/g, '').trim();
+    }
+
+    // Filtr zakazanych słów Vinted TOS
+    function sanitizeText(text) {
+      let clean = text;
+      const banned = [/palet[a-ząęółśżźćń]*/gi, /zwrot[a-ząęółśżźćń]*/gi, /hurt[a-ząęółśżźćń]*/gi, /faktur[a-ząęółśżźćń]*/gi, /outlet[a-ząęółśżźćń]*/gi, /stock[a-ząęółśżźćń]*/gi];
+      banned.forEach(rg => {
+        clean = clean.replace(rg, '');
+      });
+      return clean.replace(/\s+/g, ' ').trim();
+    }
+
+    async function analyzeAndGenerate() {
+      if (selectedFiles.length === 0) {
+        alert('Proszę dodać przynajmniej 1 zdjęcie przedmiotu.');
+        return;
+      }
+
+      const apiKey = keyInput.value.trim();
+      if (!apiKey) {
+        alert('Proszę podać klucz Gemini API.');
+        return;
+      }
+      localStorage.setItem('gemini_api_key', apiKey);
+
+      const overlay = document.getElementById('loadingOverlay');
+      overlay.style.display = 'flex';
+
+      try {
+        // 1. Kompresja zdjęć bezpośrednio w telefonie
+        const base64List = await Promise.all(selectedFiles.map(f => compressImageToBase64(f)));
+
+        const conditionVal = document.getElementById('itemCondition').value;
+        const extraNotes = document.getElementById('extraNotes').value.trim();
+
+        const promptText = `
+Jesteś elitarnym ekspertem wyceny, resellu i przygotowywania ogłoszeń na platformy Vinted, OLX i Allegro Lokalnie.
+Oto zdjęcia przedmiotu (w tym tabliczki znamionowe, opakowanie, metki).
+
+Przygotuj precyzyjne opracowanie według poniższego schematu i zwróć WYŁĄCZNIE czysty JSON o następującej strukturze:
+
+{
+  "identyfikacja_model": "Dokładna nazwa przedmiotu, marka i model odczytane po kodach/tabliczkach znamionowych ze zdjęć.",
+  "marka": "Rozpoznana marka (lub 'Inna')",
+  "stan_i_kompletnosc": "Wypunktowanie elementów widocznych na zdjęciach oraz rzetelna ocena stanu (np. otwarty karton, stan idealny, kompletne okablowanie).",
+  "uwaga_vinted_marka": "Krótka uwaga ostrzegawcza jeśli przedmiot wymaga ostrożności przy wystawianiu na Vinted (np. 'Bezpieczny wybór pola Marka: Inna z uwagi na filtry botów').",
+  "tytul": "Tytuł ogłoszenia. ZASADY: 1. Maksymalnie 70 znaków. 2. CAŁKOWITY ZAKAZ słów pisanych samymi wielkimi literami (zamiast LED RGB USB pisz Led Rgb Usb). 3. Zero słów zakazanych typu 'hurt', 'paleta', 'zwroty', 'okazja'.",
+  "opis_z_tagami": "Czysty tekst bez pogrubień Markdown (**). Struktura: krótki wstęp co to za przedmiot -> główne zalety i zastosowanie -> 'W skład sprzedawanego zestawu wchodzi:' (tylko to, co na zdjęciach) -> 'Szczegóły / Specyfikacja:' -> informacja o wysyłce i odbiorze. Na samym dole po pustej linii dokładnie 20 dopasowanych hashtagów.",
+  "cena_nowy_sklep": "Szacowane widełki cenowe nowego w sklepach (np. '180 - 220 zł')",
+  "cena_ogloszenie_bufor": 139,
+  "cena_akceptuj_cel": 115,
+  "cena_sztywne_minimum": 95
+}
+
+Stan ze zwrotu: ${conditionVal}. ${extraNotes ? 'Dodatkowe uwagi: ' + extraNotes : ''}
+`;
+
+        const parts = [{ text: promptText }];
+        base64List.forEach(b64 => {
+          parts.push({
+            inline_data: {
+              mime_type: 'image/jpeg',
+              data: b64
+            }
+          });
+        });
+
+        // Bezpośrednie wywołanie Gemini API z telefonu
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts }],
+            generationConfig: {
+              response_mime_type: 'application/json',
+              temperature: 0.2
+            }
+          })
+        });
+
+        overlay.style.display = 'none';
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          alert('Błąd Google Gemini API: ' + (errData.error?.message || res.statusText));
+          return;
+        }
+
+        const resJson = await res.json();
+        const rawJsonText = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!rawJsonText) {
+          alert('Brak odpowiedzi od modelu.');
+          return;
+        }
+
+        const data = JSON.parse(rawJsonText);
+
+        // 1. Weryfikacja i stan
+        document.getElementById('resModel').innerText = data.identyfikacja_model || 'Rozpoznano model';
+        document.getElementById('resStan').innerText = data.stan_i_kompletnosc || 'Stan widoczny na zdjęciach';
+        document.getElementById('resUwagaVinted').innerText = data.uwaga_vinted_marka || 'Wybierz pole Marka: Inna w celu ochrony konta.';
+
+        // 2. Wycena
+        document.getElementById('resCenaNowy').innerText = data.cena_nowy_sklep || '-- zł';
+        document.getElementById('resCenaBufor').innerText = (data.cena_ogloszenie_bufor || '--') + ' zł';
+        document.getElementById('resCenaCel').innerText = (data.cena_akceptuj_cel || '--') + ' zł';
+        document.getElementById('resCenaMin').innerText = (data.cena_sztywne_minimum || '--') + ' zł';
+
+        // 3. Tytuł (wymuszenie braku ALL-CAPS i max 70 znaków)
+        let cleanTitle = enforceNoAllCaps(data.tytul || '');
+        cleanTitle = sanitizeText(cleanTitle);
+        if (cleanTitle.length > 70) {
+          cleanTitle = cleanTitle.substring(0, 70).trim();
+        }
+        document.getElementById('resTitle').innerText = cleanTitle;
+
+        // 4. Treść + 20 hashtagów (czyszczenie **)
+        let cleanDesc = cleanMarkdown(data.opis_z_tagami || '');
+        cleanDesc = sanitizeText(cleanDesc);
+        document.getElementById('resDesc').innerText = cleanDesc;
+
+        // Pokaż sekcję wyników
+        const results = document.getElementById('resultsSection');
+        results.style.display = 'block';
+        results.scrollIntoView({ behavior: 'smooth' });
+
+      } catch (err) {
+        overlay.style.display = 'none';
+        alert('Wystąpił błąd: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
