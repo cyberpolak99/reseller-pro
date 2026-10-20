@@ -1,0 +1,107 @@
+{
+  "zrodlo": "Poradnik Handlowca (Karol Pilarz) - Kompletna Baza Wiedzy 2024-2026",
+  "wersja_wiedzy": "3.0 Master Edition",
+  "filary_wiedzy": {
+    "1_systematycznosc_i_algorytm": {
+      "stala_aktywnosc": "Wystawiaj codziennie 3-6 przedmiotow zamiast jednorazowego wrzucenia 30 sztuk.",
+      "okienko_zlotego_startu": "Pierwsze 2-4 godziny decyduja o pozycjonowaniu oferty w rekomendacjach.",
+      "godziny_szczytu": {
+        "dni_robocze": "18:00 - 21:30 (szczyt zakupowy po pracy/szkole)",
+        "niedziela": "15:00 - 21:30 (najsilniejszy dzien sprzedazowy w tygodniu)",
+        "piatek": "Najslabszy dzien w tygodniu (unikaj waznych premier)"
+      },
+      "odstepy_drip_feed_minuty": [25, 45]
+    },
+    "2_strategia_trzech_cen": {
+      "opis": "Dla kazdego przedmiotu okreslamy cene startowa, satysfakcjonujaca i minimalna.",
+      "wzory": {
+        "cena_startowa_mnoznik": 1.18,
+        "cena_satysfakcjonujaca_mnoznik": 1.00,
+        "cena_minimalna_mnoznik": 0.85
+      },
+      "przyklad": "Dla celu 50 zl: Startowa = 59 zl, Satysfakcjonujaca = 50 zl, Minimalna = 42 zl."
+    },
+    "3_fotografia_i_prezentacja_amazon": {
+      "swiatlo": "Tylko swiatlo dzienne przy oknie (zakaz zoltych zarowek i flesza).",
+      "zakaz_stockowych": "Nigdy nie uzywaj zdjec katalogowych z bialym tlem z Amazona (ryzyko bana i spadek CTR).",
+      "styl_open_box": "Przedmiot wyjety z pudelka na naturalnym tle. Pudelko Amazon na 3-4 zdjeciu.",
+      "standard_6_kadrow": [
+        "1. Przod przedmiotu calosciowo (glowna miniatura)",
+        "2. Tyl / spod urzadzenia",
+        "3. Zblizenie na fakture / detale / logo",
+        "4. Tabliczka znamionowa / metka skladu",
+        "5. Pudelko / akcesoria w zestawie",
+        "6. Ewentualne mankamenty / stan opakowania (transparentnosc)"
+      ]
+    },
+    "4_skrypty_komunikacyjne": {
+      "reakcja_na_serduszko": {
+        "czas_minuty": [15, 30],
+        "rabat_procent": [5, 10],
+        "szablon": "Dzień dobry! Zauważyłem, że przedmiot wpadł Ci w oko. Złożyłem dla Ciebie ofertę z małym rabatem. Jeśli zdecydujesz się dzisiaj, paczkę nadam jutro rano. W razie pytań chętnie pomogę!"
+      },
+      "cross_selling_zestawy": {
+        "rabaty": {"2_sztuki": 10, "3_sztuki": 15, "5_sztuk": 20},
+        "szablon": "Cześć! Widzę, że obserwujesz ten przedmiot. Na profilu mam włączony rabat na zestawy (-15% przy 2 sztukach). Jeśli dobierzesz coś jeszcze, wszystko wyślę w jednej paczce z jednym kosztem dostawy!"
+      },
+      "zbijanie_lowballingu": {
+        "szablon": "Dziękuję za propozycję. Niestety nie mogę zejść do tej kwoty, ale złożyłem kontrofertę na [CENA_MIN] zł – to moja najniższa cena za pojedynczą sztukę. Przy zakupie w zestawie mogę zrobić dodatkowy rabat."
+      },
+      "wiadomosc_po_zakupie": {
+        "szablon": "Dziękuję za zakup! Paczka jest już bezpiecznie zapakowana i zostanie nadana jutro rano w Paczkomacie."
+      },
+      "prosba_o_5_gwiazdek": {
+        "szablon": "Dzień dobry! Widzę, że paczka została doręczona. Mam nadzieję, że wszystko spełnia oczekiwania! Zostawiłem już dla Ciebie 5 gwiazdek – będę wdzięczny za to samo w wolnej chwili."
+      }
+    },
+    "5_smart_relisting": {
+      "prog_martwej_oferty": "Brak sprzedazy po 7-10 dniach przy wyswietleniach ponizej 15.",
+      "algorytm_anty_shadowban": {
+        "mikro_kadrowanie": "Przyciecie zdjec o 1% w celu zmiany hasha pikseli.",
+        "czyszczenie_exif": "Usuniecie starych metadanych aparatu.",
+        "kolejnosc_zdjec": "Zdjecie nr 2 staje sie nowym zdjeciem glownym.",
+        "permutacja_tytulu": "Przestawienie szyku slow kluczowych."
+      }
+    },
+    "6_podbicia_i_promocja": {
+      "zasada_glowna": "Podbicie NIE naprawia slabej oferty. Podbijaj tylko oferty z udowodnionym potencjalem.",
+      "kryteria_oplacalnosci": "Przedmiot z marza zysku > 40 zl, ktory zbiera organiczne serduszka, ale potrzebuje wiekszej skali."
+    },
+    "7_tarcza_anty_ban": {
+      "slowa_zakazane": ["hurt", "paleta", "zwroty", "faktura", "hurtownia", "magazyn", "amazon pallet", "outlet paletowy"],
+      "slowa_obejscia_platnosci": ["blik", "przelew", "na konto", "poza vinted", "whatsapp", "paypal", "revolut", "gotowka", "odbiór osobisty z płatnością", "telegram"],
+      "slowa_podrobek": ["replika", "fejk", "fake", "kopia", "klon", "1:1", "odpowiednik", "inspirowany", "lookalike", "podobny do", "jak oryginał"],
+      "slowa_zdrowia_zakazane": ["lek", "suplement", "lek na recepte", "laktator", "soczewki kontaktowe", "probiotyk", "witamina", "tabletki"],
+      "slowa_praw_autorskich": ["w stylu zara", "w stylu hm", "jak oryginalny", "w stylu gucci", "w stylu nike", "inspirowany marką"],
+      "slowa_elektroniki_zakazanej": ["iphone", "samsung galaxy", "macbook", "laptop", "tablet", "smartfon", "telefon", "konsola", "playstation", "xbox"],
+      "bezpieczenstwo_konta": "Jedno konto na urzadzenie / karte SIM. Stopniowe rozgrzewanie profilu (2-3 oferty dziennie w 1. tygodniu).",
+      "uwagi": "Vinted blokuje tez oferty z elektronika uzywana (szczegolnie telefony/laptopy bez certyfikatu), leki i suplementy, podrobki marek luksusowych oraz jakiekolwiek ominiecie systemu platnosci Vinted."
+    },
+    "8_podatki_polska": {
+      "dac7_limity": "30 transakcji lub 2000 EUR rocznie (raportowanie do KAS).",
+      "dzialalnosc_nierejestrowana": "Miesieczny przychod do 75% minimalnego wynagrodzenia brutto."
+    },
+    "9_zasady_wystawiania_vinted": {
+      "tematy_zabronione": [
+        "Elektronika uzywana (telefony, laptopy, tablety bez gwarancji sprzedawcy)",
+        "Podrobki i repliki marek luksusowych",
+        "Leki, suplementy, wyroby medyczne na recepte",
+        "Alkohol i tyton",
+        "Bron, noz, przedmioty niebezpieczne",
+        "Towary wymagajace certyfikatow (np. foteliki samochodowe po wypadku)",
+        "Produkty dla niemowlat z ryzkiem bezpieczenstwa (laktatory, soczewki)",
+        "Jakiekolwiek obejscie platnosci Vinted"
+      ],
+      "limity_konta": {
+        "maks_ofert_dziennie_nowe_konto": 5,
+        "maks_ofert_dziennie_rozgrzane_konto": 20,
+        "czas_rozgrzewania_dni": 14
+      },
+      "algorytm_widocznosci": "Oferty z wieksza liczba zdjec (min 4), dopasowanymi hasztagami i opisem bez slow zakazanych dostaja boost w pierwszych 4h.",
+      "zwroty_niedozwolone_w_opisie": [
+        "Sprzedam poza vinted", "Napisz na whatsapp", "Zaplac blikiem", "Mam wiecej w hurtowni",
+        "Sprzedaje hurtem", "Faktura VAT", "Odbiór osobisty z gotówką", "Telegram"
+      ]
+    }
+  }
+}

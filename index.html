@@ -283,7 +283,7 @@
         <div class="brand-subtitle">Vinted • OLX • Allegro Lokalnie</div>
       </div>
     </div>
-    <div class="badge-tos">🛡️ TOS GUARD 2026</div>
+    <div class="badge-tos">🛡️ TOS GUARD 2026 (5 KATEGORII)</div>
   </header>
 
   <div class="container">
@@ -406,6 +406,19 @@
             <button class="btn-copy" onclick="copyText('resDesc')">📋 Kopiuj Cały Opis</button>
           </div>
           <div class="code-content" id="resDesc"></div>
+        </div>
+      </div>
+
+      <!-- 5. Skrypt negocjacyjny (Obrona Ceny wg Pilarza) -->
+      <div class="section-card">
+        <div class="section-header">💬 5. Skrypt negocjacji na czat Vinted (obrona ceny)</div>
+        
+        <div class="code-box">
+          <div class="code-header">
+            <span class="code-label">Kontroferta na zbyt niską propozycję kupującego:</span>
+            <button class="btn-copy" onclick="copyText('resScript')">📋 Kopiuj Skrypt</button>
+          </div>
+          <div class="code-content" id="resScript"></div>
         </div>
       </div>
 
@@ -562,10 +575,22 @@
       return text.replace(/\*\*/g, '').replace(/###/g, '').replace(/##/g, '').trim();
     }
 
-    // Filtr zakazanych słów Vinted TOS
+    // Rozszerzona Tarcza Anty-Ban Vinted TOS (5 Kategorii - Poradnik Handlowca)
     function sanitizeText(text) {
       let clean = text;
-      const banned = [/palet[a-ząęółśżźćń]*/gi, /zwrot[a-ząęółśżźćń]*/gi, /hurt[a-ząęółśżźćń]*/gi, /faktur[a-ząęółśżźćń]*/gi, /outlet[a-ząęółśżźćń]*/gi, /stock[a-ząęółśżźćń]*/gi];
+      const banned = [
+        // 1. Działalność komercyjna / paletowa
+        /palet[a-ząęółśżźćń]*/gi, /zwrot[a-ząęółśżźćń]*/gi, /hurt[a-ząęółśżźćń]*/gi, /faktur[a-ząęółśżźćń]*/gi,
+        /outlet[a-ząęółśżźćń]*/gi, /stock[a-ząęółśżźćń]*/gi, /magazyn[a-ząęółśżźćń]*/gi, /amazon\s*pallet/gi,
+        // 2. Obejście prowizji Vinted (natychmiastowy ban konta)
+        /\bblik\b/gi, /\bprzelew\b/gi, /na\s+konto/gi, /poza\s+vinted/gi, /\bwhatsapp\b/gi, /\bpaypal\b/gi, /\brevolut\b/gi, /\btelegram\b/gi,
+        // 3. Słowa zakazane Allegro i OLX
+        /\bokazja\b/gi, /\bhit\b/gi, /\bpromocja\b/gi, /\btanio\b/gi, /\bpolecam\b/gi, /\bbcm\b/gi, /\bsuper\b/gi, /\bnowość\b/gi, /\bnowosc\b/gi, /\bwarto\b/gi,
+        // 4. Podróbki i zamienniki marek
+        /\breplika\b/gi, /\bfejk\b/gi, /\bfake\b/gi, /\bklon\b/gi, /\b1:1\b/gi, /\blookalike\b/gi, /w\s+stylu\s+[a-ząęółśżźćń]+/gi,
+        // 5. Zdrowie i ograniczenia
+        /\bsuplement[a-ząęółśżźćń]*/gi, /lek\s+na\s+recept[a-ząęółśżźćń]*/gi, /\blaktator[a-ząęółśżźćń]*/gi, /soczewk[a-ząęółśżźćń]*/gi
+      ];
       banned.forEach(rg => {
         clean = clean.replace(rg, '');
       });
@@ -611,7 +636,8 @@ Przygotuj precyzyjne opracowanie według poniższego schematu i zwróć WYŁĄCZ
   "cena_nowy_sklep": "Szacowane widełki cenowe nowego w sklepach (np. '180 - 220 zł')",
   "cena_ogloszenie_bufor": 139,
   "cena_akceptuj_cel": 115,
-  "cena_sztywne_minimum": 95
+  "cena_sztywne_minimum": 95,
+  "skrypt_negocjacji": "Zwięzła, uprzejma odpowiedź do kupującego na czacie Vinted zbijająca zbyt niską ofertę i proponująca cenę minimalną jako ostateczną kontrofertę."
 }
 
 Stan ze zwrotu: ${conditionVal}. ${extraNotes ? 'Dodatkowe uwagi: ' + extraNotes : ''}
@@ -681,6 +707,11 @@ Stan ze zwrotu: ${conditionVal}. ${extraNotes ? 'Dodatkowe uwagi: ' + extraNotes
         let cleanDesc = cleanMarkdown(data.opis_z_tagami || '');
         cleanDesc = sanitizeText(cleanDesc);
         document.getElementById('resDesc').innerText = cleanDesc;
+
+        // 5. Skrypt negocjacji (obrona ceny)
+        const minPrice = data.cena_sztywne_minimum || '--';
+        document.getElementById('resScript').innerText = data.skrypt_negocjacji || 
+          ('Dziękuję za propozycję. Niestety nie mogę zejść do tej kwoty, ale złożyłem kontrofertę na ' + minPrice + ' zł – to moja najniższa cena za ten przedmiot. Jeśli zdecydujesz się dzisiaj, paczkę nadam jutro rano w Paczkomacie.');
 
         // Pokaż sekcję wyników
         const results = document.getElementById('resultsSection');
